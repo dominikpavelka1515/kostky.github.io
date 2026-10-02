@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hrací kostka</title>
+    <!-- Přidání moderního fontu Inter z Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* CSS: Vzhled a stylování stránky (Moderní Dark Glassmorphism) */
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+            color: #f8fafc;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .container {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 40px;
+            border-radius: 24px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            text-align: center;
+            width: 320px;
+        }
+
+        h1 {
+            font-size: 24px;
+            font-weight: 700;
+            color: #f8fafc;
+            margin-top: 0;
+            margin-bottom: 24px;
+            letter-spacing: -0.5px;
+        }
+
+        /* Vizuální podoba kostky - moderní 3D efekt */
+        .dice {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(145deg, #ffffff, #e2e8f0);
+            color: #0f172a;
+            border: none;
+            border-radius: 24px;
+            font-size: 56px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 30px auto;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3), inset 0 2px 4px rgba(255, 255, 255, 0.8);
+            transition: transform 0.1s ease;
+        }
+
+        /* Třída pro třesoucí se animaci hodu */
+        @keyframes shake {
+            0% { transform: translate(1px, 1px) rotate(0deg); }
+            20% { transform: translate(-3px, 0px) rotate(-10deg); }
+            40% { transform: translate(3px, 2px) rotate(10deg); }
+            60% { transform: translate(-1px, -1px) rotate(0deg); }
+            80% { transform: translate(3px, -2px) rotate(-5deg); }
+            100% { transform: translate(0, 0) rotate(0deg); }
+        }
+
+        .dice.rolling {
+            animation: shake 0.4s ease-in-out infinite;
+            background: linear-gradient(145deg, #cbd5e1, #94a3b8);
+        }
+
+        /* Tlačítko - moderní gradient s efektem po najetí */
+        button {
+            background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 14px 20px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 12px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+            transition: all 0.2s ease;
+        }
+
+        button:hover:not(:disabled) {
+            background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.6);
+            transform: translateY(-2px);
+        }
+
+        button:active:not(:disabled) {
+            transform: translateY(0);
+        }
+
+        button:disabled {
+            background: #334155;
+            color: #64748b;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Hrací kostka</h1>
+        
+        <!-- HTML: Zde se bude zobrazovat hozené číslo -->
+        <div id="dice" class="dice">?</div>
+        
+        <!-- HTML: Tlačítko pro spuštění akce v JavaScriptu -->
+        <button id="btn" onclick="hodKostkou()">Hodit kostkou</button>
+    </div>
+
+    <script>
+        // JAVASCRIPT: Logika aplikace
+        function hodKostkou() {
+            let kostkaElement = document.getElementById("dice");
+            let tlacitko = document.getElementById("btn");
+
+            // Deaktivujeme tlačítko po dobu animace
+            tlacitko.disabled = true;
+
+            // Spustíme třesoucí se animaci
+            kostkaElement.classList.add("rolling");
+
+            // Efekt zběsilého přeskakování čísel během hodu
+            let interval = setInterval(() => {
+                let mezicislo = Math.floor(Math.random() * 6) + 1;
+                kostkaElement.textContent = mezicislo;
+            }, 60);
+
+            // Po 400 ms animaci zastavíme a zobrazíme finální výsledek
+            setTimeout(() => {
+                clearInterval(interval);
+
+                // 1. Vygeneruje finální náhodné číslo od 1 do 6
+                let cislo = Math.floor(Math.random() * 6) + 1;
+
+                // 3. Změní text uvnitř elementu na vygenerované číslo
+                kostkaElement.textContent = cislo;
+
+                // Ukončíme animaci
+                kostkaElement.classList.remove("rolling");
+
+                // Znovu povolíme tlačítko
+                tlacitko.disabled = false;
+            }, 400);
+        }
+    </script>
+
+</body>
+</html>
